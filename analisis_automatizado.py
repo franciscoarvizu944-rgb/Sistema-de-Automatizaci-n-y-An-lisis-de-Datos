@@ -2,44 +2,56 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-# --- CONFIGURACIÓN DE CARPETAS ---
-# Esto soluciona el problema de no tener carpetas en GitHub
-for folder in ['data', 'output']:
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+def inicializar_entorno():
+    """Crea las carpetas necesarias para el proyecto."""
+    for carpeta in ['data', 'output']:
+        if not os.path.exists(carpeta):
+            os.makedirs(carpeta)
+            print(f"Carpeta '{carpeta}' creada.")
 
-def ejecutar_pipeline():
-    print("🚀 Iniciando sistema de automatización...")
+def crear_data_ejemplo():
+    """Genera un archivo CSV de prueba si no existe."""
+    path = 'data/ventas_crudo.csv'
+    if not os.path.exists(path):
+        data = {
+            'Fecha': ['2026-01-01', '2026-01-01', '2026-01-02', '2026-02-01', '2026-02-15', '2026-03-01'],
+            'Producto': ['Laptop', 'Laptop', 'Mouse', 'Laptop', 'Teclado', 'Mouse'],
+            'Ventas': [1200, 1200, 25, 1250, 45, 30], # Incluye un duplicado para limpiar
+            'Vendedor': ['Ana', 'Ana', 'Luis', 'Ana', 'Pedro', 'Luis']
+        }
+        pd.DataFrame(data).to_csv(path, index=False)
+        print("Dataset de prueba generado en /data.")
+
+def procesar_datos():
+    print("--- Iniciando Procesamiento ---")
+    # Leer datos
+    df = pd.read_csv('data/ventas_crudo.csv')
     
-    # 1. Simulación de datos (En un caso real, leerías un Excel/CSV)
-    data = {
-        'Fecha': ['2026-01-01', '2026-01-02', '2026-02-01', '2026-02-15', '2026-03-01'],
-        'Producto': ['Laptop', 'Mouse', 'Laptop', 'Teclado', 'Mouse'],
-        'Ventas': [1200, 25, 1200, 45, 25],
-        'Stock': [5, 50, 4, 30, 48]
-    }
-    df = pd.DataFrame(data)
+    # 1. Limpieza de duplicados
+    antes = len(df)
+    df.drop_duplicates(inplace=True)
+    print(f"Limpieza completa: Se eliminaron {antes - len(df)} registros duplicados.")
+
+    # 2. Transformación
     df['Fecha'] = pd.to_datetime(df['Fecha'])
-
-    # 2. Limpieza y Procesamiento (Pandas)
-    # Eliminamos duplicados y calculamos métricas
-    df_limpio = df.drop_duplicates()
-    resumen = df_limpio.groupby(df_limpio['Fecha'].dt.month_name())['Ventas'].sum()
-
-    # 3. Visualización de Tendencias (Matplotlib)
-    plt.figure(figsize=(8, 5))
-    resumen.plot(kind='line', marker='o', color='green')
-    plt.title('Tendencia de Ventas Mensuales 2026')
-    plt.ylabel('Ingresos ($)')
-    plt.grid(True)
+    df['Mes'] = df['Fecha'].dt.strftime('%B')
     
-    # Guardar resultado
+    # 3. Análisis: Ventas por mes
+    reporte_mes = df.groupby('Mes')['Ventas'].sum().reset_index()
+    
+    # 4. Generar Gráfica
+    plt.figure(figsize=(10, 5))
+    plt.bar(reporte_mes['Mes'], reporte_mes['Ventas'], color='#3498db')
+    plt.title('Reporte Automatizado: Ventas por Mes')
+    plt.xlabel('Mes')
+    plt.ylabel('Ventas ($)')
     plt.savefig('output/reporte_tendencias.png')
-    print("✅ Reporte visual generado en /output")
     
-    # 4. Exportar a Excel optimizado
-    df_limpio.to_excel('output/datos_procesados.xlsx', index=False)
-    print("✅ Excel limpio generado en /output")
+    # 5. Exportar Excel
+    df.to_excel('output/datos_procesados.xlsx', index=False)
+    print("Éxito: Reportes generados en la carpeta /output")
 
 if __name__ == "__main__":
-    ejecutar_pipeline()
+    inicializar_entorno()
+    crear_data_ejemplo()
+    procesar_datos()
