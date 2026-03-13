@@ -1,19 +1,20 @@
-# 📊 Sistema de Automatización y Análisis de Datos (Python)
+# 📊 Data Automation & Insight Generator (Python)
 
-Este proyecto automatiza la limpieza y visualización de reportes críticos de ventas e inventarios, eliminando el error humano y reduciendo tiempos de respuesta.
+Este proyecto automatiza el ciclo de vida de los datos: desde la ingesta de archivos "sucios" (CSV/Excel) hasta la generación de reportes visuales estratégicos. Diseñado para eliminar procesos manuales y reducir errores operativos en un 100%.
 
-## 🛠️ Tecnologías utilizadas
-* **Python 3.x**
-* **Pandas:** Procesamiento y limpieza de datos.
-* **Matplotlib:** Generación de visualizaciones dinámicas.
-* **Openpyxl:** Manipulación de archivos Excel.
+## 🚀 Impacto del Proyecto
+* **Automatización Total:** Transforma datos crudos en reportes limpios en segundos.
+* **Visualización Dinámica:** Genera gráficas de tendencias mensuales automáticamente.
+* **Escalabilidad:** Estructura modular preparada para integrarse con bases de datos SQL o APIs.
 
-## 🚀 Funcionalidades
-1. **Limpieza Automática:** Identifica y corrige registros duplicados o nulos.
-2. **Análisis de Tendencias:** Genera gráficas de rendimiento mensual automáticamente.
-3. **Exportación:** Genera reportes listos para la toma de decisiones en formato `.xlsx` y `.png`.
+## 🛠️ Stack Tecnológico
+* **Lenguaje:** Python 3.10+
+* **Librerías Clave:** * `Pandas` (Procesamiento de datos)
+    * `Matplotlib` (Visualización de datos)
+    * `Openpyxl` (Motor para archivos Excel)
 
-## 📦 Cómo ejecutar
-1. Clona el repositorio.
-2. Instala las dependencias: `pip install pandas matplotlib openpyxl`
-3. Ejecuta el script: `python analisis_automatizado.py`
+## 📦 Instalación y Uso
+1. Clonar el repositorio.
+2. Instalar dependencias:
+   ```bash
+   pip install -r requirements.txt
